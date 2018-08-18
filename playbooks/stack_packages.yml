@@ -1,0 +1,20 @@
+---
+  - hosts: stack-control:compute
+    become: yes
+    tasks:
+   
+      - name: adding queen repos
+        zypper_repository: 
+          name: Queens 
+          repo: 'obs://Cloud:OpenStack:Queens/openSUSE_Leap_42.3'
+          state: present
+          
+          
+      - name: refresh dist upgrade zypper
+        zypper:
+          name: '*'
+          state: dist-upgrade
+          disable_gpg_check: yes
+
+      - name: install python-stack client
+        zypper: name=python-openstackclient state=present update_cache=yes

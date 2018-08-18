@@ -1,0 +1,26 @@
+---
+  - hosts: stack-control
+    become: yes
+    tasks:
+      
+      - name: install chrony
+        zypper: name=chrony state=present update_cache=yes
+      
+      - name: setting up ntp
+        blockinfile:
+          path: /etc/chrony.conf
+          block: |
+            server time.google.com iburst
+            allow 10.0.0.0/24
+
+      - name: restarting and enabling chrony
+        service:
+          name: chronyd
+          enabled: yes
+          state: restarted
+
+      - name: check statues of chrony
+        service:
+          name: chronyd
+          state: started
+
