@@ -2,9 +2,22 @@
   - hosts: stack-control
     become: yes
     tasks:
-      
+     
+
+      - name: adding a hostname
+        blockinfile:
+          path: /etc/hosts
+          block: |
+            127.0.0.1 controller
+
       - name: install rabbitmq-server
-        zypper: name=rabbitmq-server state=present update_cache=yes disable_gpg_check=yes disable_recommends=no update_cache=yes
+        zypper:
+          name: rabbitmq-server
+          state: present
+          update_cache: yes
+          disable_gpg_check: yes
+          disable_recommends: yes
+
 
       - name: enable and start rabbitmq-server
         service: name=rabbitmq-server enabled=yes state=started
