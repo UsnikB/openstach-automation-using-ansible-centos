@@ -4,7 +4,7 @@
     tasks:
       
       - name: install mariadb pymysql
-        zypper: name={{ item }} state=present update_cache=yes
+        zypper: name={{ item }} state=present update_cache=yes disable_gpg_check=yes disable_recommends=no update_cache=yes
         with_items:
           - 'mariadb-client'
           - 'mariadb'
@@ -30,3 +30,5 @@
 
       - name: enable and start mysql
         service: name=mysql.service enabled=yes state=started
+
+        

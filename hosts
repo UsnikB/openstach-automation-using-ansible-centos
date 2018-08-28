@@ -1,9 +1,9 @@
 [stack-control]
-server1
+controller
 
-[compute]
-server2
+[compute-grp]
+compute
 
-[control]
+[control-grp]
 control ansible_connection=local
 

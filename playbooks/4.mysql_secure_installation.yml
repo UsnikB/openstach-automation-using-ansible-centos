@@ -1,0 +1,15 @@
+---
+  - hosts: stack-control
+    become: yes
+    tasks: 
+       
+      - name: install mysql pymysql
+        zypper: name={{ item }} state=present update_cache=yes disable_gpg_check=yes disable_recommends=no update_cache=yes
+        with_items:
+          - 'mysql'
+
+      - name: enable and start mysql
+        service: name=mysql.service enabled=yes state=started
+
+      - name: running mysql_secure_instrallation
+        script: /home/usnik/ansible-stack/playbooks/mysql_secure_instrallation.sh
