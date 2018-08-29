@@ -1,0 +1,69 @@
+---
+  - hosts: stack-control
+    become: yes
+    tasks: 
+
+
+      # - name: mysql permissions
+      #   script: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/keystone/scripts/keystonepre.sh
+
+      - name: install keystone packages
+        zypper: name={{ item }} state=present update_cache=yes disable_gpg_check=yes disable_recommends=no update_cache=yes
+        with_items:
+          - 'openstack-keystone'
+          - 'apache2-mod_wsgi'
+
+      - name: replace line
+        lineinfile: 
+          dest: /etc/keystone/keystone.conf
+          regexp: '^(.*)connection =(.*)$' 
+          line: 'connection = mysql+pymysql://keystone:KEYSTONE_DBPASS@controller/keystone"'
+          backrefs: yes
+
+      - name: replace line
+        lineinfile: 
+          dest: /etc/keystone/keystone.conf
+          regexp: '^(.*)KEYSTONE_DBPASS =(.*)$' 
+          line: 'KEYSTONE_DBPASS= "qaz"'
+          backrefs: yes
+
+      - name: replace line
+        lineinfile: 
+          dest: /etc/keystone/keystone.conf
+          regexp: '^(.*)provider =(.*)$' 
+          line: 'provider= fernet'
+          backrefs: yes
+
+      - name: keystone manage
+        script: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/keystone/scripts/keystone-manage.sh
+
+      - name: replace line
+        lineinfile: 
+          dest: /etc/sysconfig/apache2
+          regexp: '^(.*)APACHE_SERVERNAME =(.*)$' 
+          line: 'APACHE_SERVERNAME="controller"'
+          backrefs: yes
+
+      - name: copying wsgi-keystone.conf
+        copy:
+          src: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/keystone/files/wsgi-keystone.conf
+          dest: /etc/apache2/conf.d/
+
+      - name: change ownership
+        command: chown -R keystone:keystone /etc/keystone
+
+      - name: enable and start apache2
+        service: name=apache2 enabled=yes state=started
+
+
+      - name: exporting system variables
+        blockinfile:
+          path: /etc/environment
+          block: |
+            export OS_USERNAME=admin
+            export OS_PASSWORD=qaz
+            export OS_PROJECT_NAME=admin
+            export OS_USER_DOMAIN_NAME=Default
+            export OS_PROJECT_DOMAIN_NAME=Default
+            export OS_AUTH_URL=http://controller:35357/v3
+            export OS_IDENTITY_API_VERSION=3
