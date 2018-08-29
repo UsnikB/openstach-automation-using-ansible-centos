@@ -9,7 +9,7 @@
 
       - name: copying etcd.conf.yml
         copy:
-          src: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/files/etcd.conf.yml
+          src: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/1.Setting_Environment/files/etcd.conf.yml
           dest: /etc/etcd/
 
       - name: copying etcd.service
