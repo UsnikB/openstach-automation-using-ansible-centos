@@ -12,4 +12,4 @@
         service: name=mysql.service enabled=yes state=started
 
       - name: running mysql_secure_instrallation
-        script: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/1.Setting_Environment/scripts/mysql_secure_instrallation.sh
+        script: playbooks/1.Setting_Environment/scripts/mysql_secure_instrallation.sh
