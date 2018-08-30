@@ -4,17 +4,17 @@
     tasks:
      
       - name: Install and configure etcd components
-        script: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/scripts/etcd_useradd.sh
+        script: playbooks/scripts/etcd_useradd.sh
 
 
       - name: copying etcd.conf.yml
         copy:
-          src: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/1.Setting_Environment/files/etcd.conf.yml
+          src: playbooks/1.Setting_Environment/files/etcd.conf.yml
           dest: /etc/etcd/
 
       - name: copying etcd.service
         copy:
-          src: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/files/etcd.service
+          src: playbooks/1.Setting_Environment/files/etcd.service
           dest: /usr/lib/systemd/system/etcd.service
 
 
