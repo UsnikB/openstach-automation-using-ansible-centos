@@ -5,7 +5,7 @@
 
 
       - name: mysql permissions
-        script: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/2.keystone/scripts/keystonepre.sh
+        script: playbooks/2.keystone/scripts/keystonepre.sh
 
       - name: install keystone packages
         zypper: name={{ item }} state=present update_cache=yes disable_gpg_check=yes disable_recommends=no update_cache=yes
@@ -35,7 +35,7 @@
           backrefs: yes
 
       - name: keystone manage
-        script: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/2.keystone/scripts/keystone-manage.sh
+        script: playbooks/2.keystone/scripts/keystone-manage.sh
 
       - name: replace line
         lineinfile: 
@@ -46,7 +46,7 @@
 
       - name: copying wsgi-keystone.conf
         copy:
-          src: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/2.keystone/files/wsgi-keystone.conf
+          src: playbooks/2.keystone/files/wsgi-keystone.conf
           dest: /etc/apache2/conf.d/
 
       - name: change ownership
