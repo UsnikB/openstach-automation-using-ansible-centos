@@ -1,0 +1,10 @@
+---
+  - hosts: stack-control
+    become: yes
+    tasks: 
+
+      - name: copy file to remote machine
+        copy: src=/home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/2.keystone/files/openstack_project_create.sh dest=/temp1.sh mode=777
+
+      - name: execute copied file
+        command: sh /temp1.sh > /openstack/creating_domain_project_user_roles.out

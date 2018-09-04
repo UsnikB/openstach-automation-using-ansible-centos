@@ -2,8 +2,6 @@
   - hosts: stack-control
     become: yes
     tasks: 
-
-
       - name: mysql permissions
         script: playbooks/2.keystone/scripts/keystonepre.sh
 

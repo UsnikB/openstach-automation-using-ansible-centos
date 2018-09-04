@@ -1,0 +1,42 @@
+---
+  - hosts: stack-control
+    become: yes
+    tasks:
+
+      - name: unsetting OS_AUTH_URL OS_PASSWORD
+        command: unset OS_AUTH_URL OS_PASSWORD
+
+      - name: copy file to remote machine
+        copy: src=playbooks/2.keystone/files/verifying_operations.sh dest=/temp1.sh mode=777
+
+      - name: execute copied file
+        command: /temp1.sh > /openstack/verifying_operations.out
+
+
+      - name: exporting system variables
+        blockinfile:
+          path: /home/usnik/admin-openrc
+          block: |
+            export OS_PROJECT_DOMAIN_NAME=Default
+            export OS_USER_DOMAIN_NAME=Default
+            export OS_PROJECT_NAME=admin
+            export OS_USERNAME=admin
+            export OS_PASSWORD=qaz
+            export OS_AUTH_URL=http://controller:5000/v3
+            export OS_IDENTITY_API_VERSION=3
+            export OS_IMAGE_API_VERSION=2
+
+
+
+      - name: exporting system variables
+        blockinfile:
+          path: /home/usnik/demo-openrc
+          block: |
+            export OS_PROJECT_DOMAIN_NAME=Default
+            export OS_USER_DOMAIN_NAME=Default
+            export OS_PROJECT_NAME=demo
+            export OS_USERNAME=demo
+            export OS_PASSWORD=qaz
+            export OS_AUTH_URL=http://controller:5000/v3
+            export OS_IDENTITY_API_VERSION=3
+            export OS_IMAGE_API_VERSION=2
