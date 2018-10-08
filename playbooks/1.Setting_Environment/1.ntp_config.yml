@@ -4,7 +4,7 @@
     tasks:
       
       - name: install chrony
-        zypper: name=chrony state=present update_cache=yes
+        yum: name=chrony state=present update_cache=yes
       
       - name: setting up ntp
         blockinfile:

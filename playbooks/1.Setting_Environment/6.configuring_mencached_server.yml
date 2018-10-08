@@ -6,18 +6,18 @@
 
 
       - name: install memcached
-        zypper: name={{ item }} state=present update_cache=yes disable_gpg_check=yes disable_recommends=no update_cache=yes
+        yum: name={{ item }} state=present update_cache=yes disable_gpg_check=yes update_cache=yes
         with_items:
           - 'memcached'
-          - 'python-python-memcached'
+          - 'python-memcached'
 
 
 
       - name: replace line
         lineinfile: 
           dest: /etc/sysconfig/memcached
-          regexp: '^(.*)MEMCACHED_PARAMS="-l 127.0.0.1"(.*)$' 
-          line: 'MEMCACHED_PARAMS="-l 10.0.0.11"'
+          regexp: '^(.*)OPTION="-l 127.0.0.1"(.*)$' 
+          line: 'OPTIONS="-l 127.0.0.1,::1,controller"'
           backrefs: yes
 
 

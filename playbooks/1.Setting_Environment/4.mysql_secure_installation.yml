@@ -4,7 +4,7 @@
     tasks: 
        
       - name: install mysql pymysql
-        zypper: name={{ item }} state=present update_cache=yes disable_gpg_check=yes disable_recommends=no update_cache=yes
+        yum: name={{ item }} state=present update_cache=yes disable_gpg_check=yes update_cache=yes
         with_items:
           - 'mysql'
 
@@ -12,4 +12,4 @@
         service: name=mysql.service enabled=yes state=started
 
       - name: running mysql_secure_instrallation
-        script: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/1.Setting_Environment/scripts/mysql_secure_instrallation.sh
+        script: /home/usnik/ansible-git/openstack-automation-using-ansiblle-CentOS/playbooks/1.Setting_Environment/scripts/mysql_secure_instrallation.sh

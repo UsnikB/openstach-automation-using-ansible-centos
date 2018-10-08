@@ -4,11 +4,11 @@
     tasks:
       
       - name: install mariadb pymysql
-        zypper: name={{ item }} state=present update_cache=yes disable_gpg_check=yes disable_recommends=no update_cache=yes
+        yum: name={{ item }} state=present update_cache=yes disable_gpg_check=yes update_cache=yes
         with_items:
-          - 'mariadb-client'
+          - 'mariadb-server'
           - 'mariadb'
-          - 'python-PyMySQL'
+          - 'python2-PyMySQL'
      
       - name: create openstack.cnf
         file:
@@ -20,7 +20,7 @@
           path: /etc/my.cnf.d/openstack.cnf
           block: |
             [mysqld]
-            bind-address = 10.0.0.11
+            bind-address = 10.0.0.243
 
             default-storage-engine = innodb
             innodb_file_per_table = on

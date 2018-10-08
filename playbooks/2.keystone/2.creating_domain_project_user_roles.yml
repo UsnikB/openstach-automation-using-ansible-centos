@@ -6,5 +6,46 @@
       - name: copy file to remote machine
         copy: src=/home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/2.keystone/files/openstack_project_create.sh dest=/temp1.sh mode=777
 
+      - name: creating admin-openrc
+        command: touch /home/usnik/admin-openrc
+
+
+      - name: exporting system variables
+        blockinfile:
+          path: /home/usnik/admin-openrc
+          block: |
+            export OS_PROJECT_DOMAIN_NAME=Default
+            export OS_USER_DOMAIN_NAME=Default
+            export OS_PROJECT_NAME=admin
+            export OS_USERNAME=admin
+            export OS_PASSWORD=qaz
+            export OS_AUTH_URL=http://controller:5000/v3
+            export OS_IDENTITY_API_VERSION=3
+            export OS_IMAGE_API_VERSION=2
+
+      - name: creating demo-openrc
+        command: touch /home/usnik/demo-openrc
+
+      - name: exporting system variables
+        blockinfile:
+          path: /home/usnik/demo-openrc
+          block: |
+            export OS_PROJECT_DOMAIN_NAME=Default
+            export OS_USER_DOMAIN_NAME=Default
+            export OS_PROJECT_NAME=demo
+            export OS_USERNAME=demo
+            export OS_PASSWORD=qaz
+            export OS_AUTH_URL=http://controller:5000/v3
+            export OS_IDENTITY_API_VERSION=3
+            export OS_IMAGE_API_VERSION=2
+
+
+      - name: executing admin-openrc
+        command: sh /home/usnik/admin-openrc
+
+      - name: executing demo-openrc
+        command: sh /home/usnik/demo-openrc
+
+
       - name: execute copied file
         command: sh /temp1.sh > /openstack/creating_domain_project_user_roles.out

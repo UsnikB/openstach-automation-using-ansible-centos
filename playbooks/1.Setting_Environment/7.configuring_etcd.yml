@@ -2,26 +2,17 @@
   - hosts: stack-control
     become: yes
     tasks:
-     
-      - name: Install and configure etcd components
-        script: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/1.Setting_Environment/scripts/etcd_useradd.sh
+      
+      - name: install mariadb pymysql
+        yum: name={{ item }} state=present update_cache=yes disable_gpg_check=yes update_cache=yes
+        with_items:
+          - 'etcd'
 
-
-
-      - name: copying etcd.conf.yml
+      - name: copying etcd.conf
         copy:
-          src: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/1.Setting_Environment/files/etcd.conf.yml
+          src: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/1.Setting_Environment/files/etcd.conf
           dest: /etc/etcd/
 
-      - name: copying etcd.service
-        copy:
-          src: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/1.Setting_Environment/files/etcd.service
-          dest: /usr/lib/systemd/system/etcd.service
-
-
-
-      - name: reload systemctl demon
-        command: systemctl daemon-reload
 
       - name: enable and start etcd
         service: name=etcd enabled=yes state=started

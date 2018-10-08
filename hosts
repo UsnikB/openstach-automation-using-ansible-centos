@@ -1,8 +1,8 @@
 [stack-control]
-controller
+controller-c
 
 [compute-grp]
-compute
+compute-c
 
 [control-grp]
 control ansible_connection=local

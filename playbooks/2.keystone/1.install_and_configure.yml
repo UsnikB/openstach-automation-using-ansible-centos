@@ -3,19 +3,20 @@
     become: yes
     tasks: 
       - name: mysql permissions
-        script: playbooks/2.keystone/scripts/keystonepre.sh
+        script: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/2.keystone/scripts/keystonepre.sh
 
       - name: install keystone packages
-        zypper: name={{ item }} state=present update_cache=yes disable_gpg_check=yes disable_recommends=no update_cache=yes
+        yum: name={{ item }} state=present update_cache=yes disable_gpg_check=yes update_cache=yes
         with_items:
           - 'openstack-keystone'
-          - 'apache2-mod_wsgi'
+          - 'httpd'
+          - 'mod_wsgi'
 
       - name: replace line
         lineinfile: 
           dest: /etc/keystone/keystone.conf
           regexp: '^(.*)connection =(.*)$' 
-          line: 'connection = mysql+pymysql://keystone:KEYSTONE_DBPASS@controller/keystone"'
+          line: 'connection = mysql+pymysql://keystone:KEYSTONE_DBPASS@controller/keystone'
           backrefs: yes
 
       - name: replace line
@@ -33,7 +34,12 @@
           backrefs: yes
 
       - name: keystone manage
-        script: playbooks/2.keystone/scripts/keystone-manage.sh
+        script: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/2.keystone/scripts/keystone-manage.sh
+
+
+
+##################################################3
+
 
       - name: replace line
         lineinfile: 
@@ -44,7 +50,7 @@
 
       - name: copying wsgi-keystone.conf
         copy:
-          src: playbooks/2.keystone/files/wsgi-keystone.conf
+          src: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/2.keystone/files/wsgi-keystone.conf
           dest: /etc/apache2/conf.d/
 
       - name: change ownership
