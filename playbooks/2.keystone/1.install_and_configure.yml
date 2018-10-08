@@ -2,8 +2,9 @@
   - hosts: stack-control
     become: yes
     tasks: 
+
       - name: mysql permissions
-        script: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/2.keystone/scripts/keystonepre.sh
+        script: /home/usnik/ansible-git/openstack-automation-using-ansible-CentOS/playbooks/2.keystone/scripts/keystonepre.sh
 
       - name: install keystone packages
         yum: name={{ item }} state=present update_cache=yes disable_gpg_check=yes update_cache=yes
@@ -16,15 +17,15 @@
         lineinfile: 
           dest: /etc/keystone/keystone.conf
           regexp: '^(.*)connection =(.*)$' 
-          line: 'connection = mysql+pymysql://keystone:KEYSTONE_DBPASS@controller/keystone'
+          line: 'connection = mysql+pymysql://keystone:qaz@controller/keystone'
           backrefs: yes
 
-      - name: replace line
-        lineinfile: 
-          dest: /etc/keystone/keystone.conf
-          regexp: '^(.*)KEYSTONE_DBPASS =(.*)$' 
-          line: 'KEYSTONE_DBPASS= "qaz"'
-          backrefs: yes
+      # - name: replace line
+      #   lineinfile: 
+      #     dest: /etc/keystone/keystone.conf
+      #     regexp: '^(.*)KEYSTONE_DBPASS =(.*)$' 
+      #     line: 'KEYSTONE_DBPASS= "qaz"'
+      #     backrefs: yes
 
       - name: replace line
         lineinfile: 
@@ -34,35 +35,28 @@
           backrefs: yes
 
       - name: keystone manage
-        script: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/2.keystone/scripts/keystone-manage.sh
-
-
-
-##################################################3
-
+        script: /home/usnik/ansible-git/openstack-automation-using-ansible-CentOS/playbooks/2.keystone/scripts/keystone-manage.sh
 
       - name: replace line
         lineinfile: 
-          dest: /etc/sysconfig/apache2
-          regexp: '^(.*)APACHE_SERVERNAME =(.*)$' 
-          line: 'APACHE_SERVERNAME="controller"'
+          dest: /etc/httpd/conf/httpd.conf
+          regexp: '^(.*)ServerName(.*)$' 
+          line: 'ServerName controller'
           backrefs: yes
 
-      - name: copying wsgi-keystone.conf
-        copy:
-          src: /home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/2.keystone/files/wsgi-keystone.conf
-          dest: /etc/apache2/conf.d/
+      - name: creating a softlink
+        command: ln -s /usr/share/keystone/wsgi-keystone.conf /etc/httpd/conf.d/
 
-      - name: change ownership
-        command: chown -R keystone:keystone /etc/keystone
 
-      - name: enable and start apache2
-        service: name=apache2 enabled=yes state=started
+      - name: enable and start httpd.service
+        service: name=httpd.service enabled=yes state=started
 
+      - name: exporting in current session
+        script: /home/usnik/ansible-git/openstack-automation-using-ansible-CentOS/playbooks/2.keystone/scripts/export.sh
 
       - name: exporting system variables
         blockinfile:
-          path: /etc/environment
+          path: /etc/profile.d/
           block: |
             export OS_USERNAME=admin
             export OS_PASSWORD=qaz
@@ -71,3 +65,5 @@
             export OS_PROJECT_DOMAIN_NAME=Default
             export OS_AUTH_URL=http://controller:35357/v3
             export OS_IDENTITY_API_VERSION=3
+
+

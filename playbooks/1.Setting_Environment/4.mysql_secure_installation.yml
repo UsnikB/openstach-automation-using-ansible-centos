@@ -2,14 +2,6 @@
   - hosts: stack-control
     become: yes
     tasks: 
-       
-      - name: install mysql pymysql
-        yum: name={{ item }} state=present update_cache=yes disable_gpg_check=yes update_cache=yes
-        with_items:
-          - 'mysql'
-
-      - name: enable and start mysql
-        service: name=mysql.service enabled=yes state=started
-
+      
       - name: running mysql_secure_instrallation
-        script: /home/usnik/ansible-git/openstack-automation-using-ansiblle-CentOS/playbooks/1.Setting_Environment/scripts/mysql_secure_instrallation.sh
+        script: /home/usnik/ansible-git/openstack-automation-using-ansible-CentOS/playbooks/1.Setting_Environment/scripts/mysql_secure_instrallation.sh

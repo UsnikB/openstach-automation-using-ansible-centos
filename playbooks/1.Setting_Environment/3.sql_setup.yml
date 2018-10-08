@@ -29,6 +29,6 @@
             character-set-server = utf8
 
       - name: enable and start mysql
-        service: name=mysql.service enabled=yes state=started
+        service: name=mariadb.service enabled=yes state=started
 
         
