@@ -34,8 +34,12 @@
           line: 'provider= fernet'
           backrefs: yes
 
+      - name: copy file to remote machine
+        copy: src=/home/usnik/ansible-git/openstack-automation-using-ansible-CentOS/playbooks/2.keystone/scripts/keystone-manage.sh dest=/temp.sh mode=777
+
       - name: keystone manage
-        script: /home/usnik/ansible-git/openstack-automation-using-ansible-CentOS/playbooks/2.keystone/scripts/keystone-manage.sh
+        command: sh /temp.sh >> keystone_manage_output
+        ignore_errors: yes
 
       - name: replace line
         lineinfile: 
@@ -46,17 +50,20 @@
 
       - name: creating a softlink
         command: ln -s /usr/share/keystone/wsgi-keystone.conf /etc/httpd/conf.d/
-
-
+        ignore_errors: yes
+        
       - name: enable and start httpd.service
         service: name=httpd.service enabled=yes state=started
 
       - name: exporting in current session
         script: /home/usnik/ansible-git/openstack-automation-using-ansible-CentOS/playbooks/2.keystone/scripts/export.sh
 
+      - name: creating bashrc
+        command: touch /root/.bashrc
+
       - name: exporting system variables
         blockinfile:
-          path: /etc/profile.d/
+          path: /root/.bashrc
           block: |
             export OS_USERNAME=admin
             export OS_PASSWORD=qaz

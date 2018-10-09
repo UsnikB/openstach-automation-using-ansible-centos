@@ -4,7 +4,10 @@
     tasks: 
 
       - name: copy file to remote machine
-        copy: src=/home/usnik/ansible-git/openstack-automation-using-ansible/playbooks/2.keystone/files/openstack_project_create.sh dest=/temp1.sh mode=777
+        copy: src=/home/usnik/ansible-git/openstack-automation-using-ansible-CentOS/playbooks/2.keystone/files/openstack_project_create.sh dest=/temp1.sh mode=777
+
+      - name: copy file to remote machine
+        command: sh /temp1.sh > openstack_create_output
 
       - name: creating admin-openrc
         command: touch /home/usnik/admin-openrc
